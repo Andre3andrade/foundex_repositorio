@@ -1,0 +1,14 @@
+[theme]
+primaryColor="#E60000"
+
+# Fundo principal do dashboard
+backgroundColor="#FFFFFF"
+
+# Cor de fundo da barra lateral e elementos secundários
+secondaryBackgroundColor="#F0F2F6"
+
+# Cor do texto principal
+textColor="#31333F"
+
+# Fonte padrão
+font="sans serif"
