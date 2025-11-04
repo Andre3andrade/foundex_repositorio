@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 import os
 
-# --- Configuração da Página ---
 st.set_page_config(
     page_title="FUNDEX - Dashboard de Análise de Despesas",
     page_icon="🏗️",
@@ -11,7 +10,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Função de Carregamento de Dados ---
 @st.cache_data
 def carregar_dados(caminho_arquivo):
     """
@@ -23,7 +21,7 @@ def carregar_dados(caminho_arquivo):
                  f"Verifique se ele está na mesma pasta do dashboard.")
         return pd.DataFrame()
 
-    # Detecta o formato automaticamente
+    
     try:
         if caminho_arquivo.endswith('.xlsx'):
             df = pd.read_excel(caminho_arquivo)
@@ -36,7 +34,7 @@ def carregar_dados(caminho_arquivo):
         st.error(f"Erro ao ler o arquivo: {e}")
         return pd.DataFrame()
 
-    # --- Pré-processamento dos dados ---
+   
     try:
         df['Data'] = pd.to_datetime(df['Data'])
         df['Despesa_Positiva'] = df['Valor_Realizado'].abs()
@@ -52,20 +50,19 @@ def carregar_dados(caminho_arquivo):
     return df
 
 
-# --- Função de Formatação ---
+
 def formatar_moeda(valor):
     """Formata um número como moeda BRL (ex: R$ 1.234,56)."""
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-# --- Carregamento do Arquivo ---
-arquivo_despesas = "despesas.xlsx"  # Pode ser .xlsx ou .csv
+arquivo_despesas = "despesas.xlsx"  
 df = carregar_dados(arquivo_despesas)
 
 if df.empty:
     st.stop()
 
-# --- Sidebar de Filtros ---
+
 st.sidebar.header("🔍 Filtros Interativos")
 
 todos_centros = df['Centro_Custo'].unique()
@@ -92,7 +89,7 @@ data_inicio, data_fim = st.sidebar.date_input(
     max_value=data_max
 )
 
-# --- Aplicação dos Filtros ---
+
 df_filtrado = df[
     (df['Centro_Custo'].isin(centros_selecionados)) &
     (df['Descricao_Conta'].isin(contas_selecionadas)) &
@@ -100,11 +97,11 @@ df_filtrado = df[
     (df['Data'].dt.date <= data_fim)
 ]
 
-# --- Título e Separador ---
+
 st.title("🏗️ FUNDEX - Análise de Despesas")
 st.markdown("---")
 
-# --- KPIs ---
+
 total_realizado = df_filtrado['Despesa_Positiva'].sum()
 total_previsto = df_filtrado['Valor_Previsto'].sum()
 variacao_total = total_previsto - total_realizado
@@ -125,7 +122,7 @@ with col3:
 
 st.markdown("---")
 
-# --- Gráficos ---
+
 col_graf1, col_graf2 = st.columns(2)
 
 with col_graf1:
@@ -189,7 +186,7 @@ with col_graf4:
     )
     st.plotly_chart(fig_prev_real, use_container_width=True)
 
-# --- Tabela Final ---
+
 st.markdown("---")
 st.subheader("🧾 Detalhes dos Lançamentos (Filtrados)")
 
